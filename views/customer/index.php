@@ -2,66 +2,13 @@
 include_once '../../functions.php';
 include_once '../../database/conn.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="../../styles.css">
 <title>Main Page</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-
-    .navbar {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-            color: #fff;
-        }
-
-    .product-container {
-        width: 80%;
-        margin: auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .product {
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        text-align: center;
-        color: #333;
-    }
-
-    p {
-        margin: 0;
-        padding: 5px 0;
-    }
-    .order-btn {
-        top: 10px;
-        right: 10px;
-        background-color: green;
-        color: #fff;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-
-</style>
+<link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
@@ -104,6 +51,52 @@ include_once '../../database/conn.php';
     ?>
 </div>
 
+
+<?php
+// Function to handle product ordering
+function orderProduct($productId, $customerId) {
+    $conn = connect();
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $currentDateTime = date('Y-m-d H:i:s');
+
+    $sql = "INSERT INTO orders (date , customers_id, products_id) VALUES ($currentDateTime, $customerId, $productId)";
+
+    if (mysqli_query($conn, $sql)) {
+        echo 'Order created successfully!';
+    } else {
+        echo 'Error: ' . mysqli_error($conn);
+    }
+
+    mysqli_close($conn);
+}
+
+if (isset($_SESSION['user']['id'])) {
+    $customerId = $_SESSION['user']['id'];
+    
+    // Check if the 'product_id' parameter is set in the URL
+    if (isset($_GET['product_id'])) {
+        $productId = $_GET['product_id'];
+
+        orderProduct($productId, $customerId);
+    }
+
+    // Your existing HTML and JavaScript code...
+
+    // JavaScript function to handle product ordering
+    echo '<script>
+        function orderProduct(productId) {
+            window.location.href = "index.php?product_id=" + productId;
+        }
+    </script>';
+} else {
+    
+    echo 'Error: User ID not specified.';
+}
+?>
 
 </body>
 </html>
