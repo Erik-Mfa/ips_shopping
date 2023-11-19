@@ -11,7 +11,7 @@ body {
     text-align: center;
     display: flex;
     justify-content: center;
-    }
+  }
 
   h1{
     text-align: center;
@@ -37,9 +37,10 @@ body {
 
   
   .placeholder {
-    color: #65657b;
+    color: #ffffff;
     font-family: sans-serif;
     pointer-events: none;
+    
   }
 
   

@@ -14,6 +14,8 @@ include_once '../../database/conn.php';
 <body>
 <div class="navbar">
     <p>Welcome to <br> IPS Online Shopping!</p>
+    <?php echo $customerId = $_SESSION['user']['user']; ?> <br><br>
+    <a href="../../login.php?logout=true">Logout</a>
 </div>
 
 <div class="product-container">
@@ -61,9 +63,7 @@ function orderProduct($productId, $customerId) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    $currentDateTime = date('Y-m-d H:i:s');
-
-    $sql = "INSERT INTO orders (date , customers_id, products_id) VALUES ($currentDateTime, $customerId, $productId)";
+    $sql = "INSERT INTO orders (customers_id, products_id) VALUES ($customerId, $productId)";
 
     if (mysqli_query($conn, $sql)) {
         echo 'Order created successfully!';
